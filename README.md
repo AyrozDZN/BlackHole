@@ -1,0 +1,2 @@
+# BlackHole
+Discord Protection Bot
