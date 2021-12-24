@@ -1,4 +1,6 @@
 /config/config.js
+/config/slashcommands.js
+/config/slashcommandsglobals.js
 
 # Logs
 logs

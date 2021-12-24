@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/AyrozDZN/BlackHole#readme",
   "dependencies": {
+    "@discordjs/rest": "^0.2.0-canary.0",
     "discord.js": "^13.3.1"
   }
 }
