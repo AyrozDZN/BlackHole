@@ -1,4 +1,6 @@
 const discord = require('discord.js')
+const moment = require('moment')
+const humanizeDuration = require('humanize-duration')
 
 module.exports = async (client) => {
     

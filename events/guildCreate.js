@@ -8,12 +8,12 @@ module.exports = async (client, guild) => {
     if (audit.action === "BOT_ADD") {
 
         const setupEmbed = new discord.MessageEmbed()
-            .setAuthor("BlackHole", client.user.avatarURL(), "https://blackhole.net")
+            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
             .setTitle("SETUP")
             .setDescription("To setup the bot, you have to do the command `/setup` on your server, only an administrator or the creator will be able to execute this command")
             .setColor(client.config.discord.color)
             .setTimestamp()
-            .setFooter("BlackHole - Protect your server", client.user.avatarURL())
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
 
         if (audit.executor.id == guild.ownerId) {
             
