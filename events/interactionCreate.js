@@ -1,14 +1,14 @@
 const discord = require('discord.js')
 
 module.exports = async (client, interaction) => {
-    if(!interaction.isCommand()) return;
+    if(!interaction.isCommand() && !interaction.isContextMenu()) return;
 
-    const slashCmds = client.slashCommands.get(interaction.commandName);
+    const cmds = client.commands.get(interaction.commandName);
 
-    if(!slashCmds) return;
+    if(!cmds) return;
 
     try {
-        await slashCmds.run(client, interaction)
+        await cmds.run(client, interaction)
     } catch(e) {
         console.error(e)
     }

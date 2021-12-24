@@ -14,16 +14,18 @@ const client = new discord.Client({
 
 client.config = require('./config/config');
 client.emotes = client.config.emojis;
-client.slashCommands = new discord.Collection();
+client.commands = new discord.Collection();
 
-//Slash Commands Handler
-const slashCommandsFiles = fs.readdirSync(`./commands/`).filter(files => files.endsWith('.js'));
+//Slash and Context Commands Handler
+fs.readdirSync('./commands').forEach(dirs => {
+    const commandsFiles = fs.readdirSync(`./commands/${dirs}`).filter(files => files.endsWith('.js'));
 
-    for (const file of slashCommandsFiles) {
-        const slash = require(`./commands/${file}`);
-        console.log(`Slash Commande chargé ${file}`);
-        client.slashCommands.set(slash.data.name, slash);
+    for (const file of commandsFiles) {
+        const cmds = require(`./commands/${dirs}/${file}`);
+        console.log(`Commande chargé ${file}`);
+        client.commands.set(cmds.data.name, cmds);
     };
+});
 
 //Events handler
 const events = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
