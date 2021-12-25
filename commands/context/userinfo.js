@@ -1,12 +1,11 @@
 const { ContextMenuCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, version } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const humanizeDuration = require('humanize-duration')
 const moment = require('moment')
-const os = require('os')
 
 module.exports = {
     data: new ContextMenuCommandBuilder()
-    .setName('Userinfo')
+    .setName('Info Utilisateur')
     .setType(2),
 
     async run(client, interaction) {

@@ -1,17 +1,16 @@
-//rename this file config.js
+module.exports  = {
 
-module.exports = {
-    emojis: {
-        
-    }, //list of emoji for easy use in the code
+	emojis: {
+		//nom: "mention de l'émoji <a:example:000000000000000000> ou <:example:000000000000000000>" 
+	}, //Liste ici tout les émojis au quelle tu veut avoir accès rapidement dans tes embeds, il suffira d'utiliser client.emotes.nom pour afficher l'émoji.
 
-    discord: {
-        token: 'Type your token here', //token of your bot
-        color : '#f8ab37', //color of main embed
-        colorError : '#F04946', //color of error embed
-        colorSuccess : '#43B481', //color of success embed
-        developer: 'Name of the developer', // Name of the developer who appear on the /botinfo embed
-        footer: 'Footer text', //text who appear on the footer of embeds
-        link: 'https://example.com' //link who appear on embeds
-    }
+	discord: {
+		token: 'Entre le token de ton bot',
+		color  : '#000000', //Couleur principale des embeds
+		colorError  : '#000000', //Couleur d'erreur des embeds
+		colorSuccess  : '#000000', //color de succès des embeds
+		developer: 'Nom du/des développeurs', // Apparait dans le /botinfo
+		footer: 'Texte du footer', //Texte qui apparait dans le footer
+		link: 'https://exemple.fr'  //Lien qui apparait sur certain embeds
+	}
 };

@@ -1,6 +1,8 @@
 /config/config.js
 /config/slashcommands.js
 /config/slashcommandsglobals.js
+/config/warns.json
+/config/guildSettings.json
 
 # Logs
 logs

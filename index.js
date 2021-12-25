@@ -35,4 +35,18 @@ for (const file of events) {
     client.on(file.split(".")[0], event.bind(null, client));
 };
 
+//Anti-Raid setup
+client.guildSettings = require('./config/guildSettings.json')
+client.warns = require('./config/warns.json')
+
+client.numAddBotMap = new Map()
+client.numBanMap = new Map()
+client.numKickMap = new Map()
+client.numEveryoneMap = new Map()
+client.numLinkMap = new Map()
+client.numSpamMap = new Map()
+client.numWebhookMap = new Map()
+client.numCreateChannelMap = new Map()
+client.numDeleteChannelMap = new Map()
+
 client.login(client.config.discord.token);

@@ -1,11 +1,13 @@
 
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, version } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const humanizeDuration = require('humanize-duration')
 const moment = require('moment')
 const os = require('os')
 
 module.exports = {
+    setupRequired: "false",
+    category: "Info",
     data: new SlashCommandBuilder()
     .setName('botinfo')
     .setDescription('Affiche les informations du bot.'),

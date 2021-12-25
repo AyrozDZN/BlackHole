@@ -1,11 +1,12 @@
 
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageEmbed, version } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 const humanizeDuration = require('humanize-duration')
 const moment = require('moment')
-const os = require('os')
 
 module.exports = {
+    setupRequired: false,
+    category: "Info",
     data: new SlashCommandBuilder()
     .setName('userinfo')
     .setDescription('Affiche les informations d\'un membre.')
@@ -27,8 +28,8 @@ module.exports = {
             .addField("📆 Date d'arrivé :", `${moment(member.joinedAt).format('[Le] DD/MM/YYYY [à] HH:mm:ss')}, il y a ${humanizeDuration(moment().diff(moment(member.joinedAt)), { units: ["y", "mo", "d", "h"], round: true, language: "fr", largest: 2, delimiter: " et "})}`)
             .addField(`🗂 Autres :`, `${member.user.flags.toArray().length} Badges\n${member.roles.cache.filter(roles => roles.name !== "@everyone").size} Rôles\n${member.permissions.toArray().length} Permissions`, true)
             .setThumbnail(`${member.user.displayAvatarURL()}?size=4096`)
-            .setFooter(`Demandé par ${interaction.member.displayName}\n${client.user.username}`)
             .setTimestamp()
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())   
             
         interaction.reply({ embeds: [UserInfo], ephemeral: true })  
     }
