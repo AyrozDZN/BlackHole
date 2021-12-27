@@ -20,13 +20,14 @@ module.exports = {
 
         const warnEmbed = new MessageEmbed()
             .setColor(client.config.discord.color)
+            .setAuthor(warnMember.user.username, warnMember.user.avatarURL())
             .setTitle(`Gestion du warn`)
-            .addField("🏷 Membre warn :", warnMember.user.tag)
-            .addField("🏷 Auteur du warn :", warnAuthor.user.tag)
-            .addField("📎 Raison :", reasonWarn != "" ? reasonWarn : "Aucune raison", true)
+            .addField("🏷 Membre warn :", warnMember.user.tag, true)
+            .addField("🏷 Auteur du warn :", warnAuthor.user.tag, true)
+            .addField("📎 Raison :", reasonWarn != "" ? reasonWarn : "Aucune raison")
             .addField("📆 Date du warn :", moment(interaction.createdAt).format('[Le] DD/MM/YYYY [à] HH:mm:ss'))
             .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())  
+            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())  
 
         const row = new MessageActionRow()
             .addComponents(
@@ -97,7 +98,7 @@ module.exports = {
             if (i.customId === 'confirmed') {
                 if (!client.warns[interaction.guild.id]) client.warns[interaction.guild.id] = {}
                 if (!client.warns[interaction.guild.id][warnMember.user.id]) client.warns[interaction.guild.id][warnMember.user.id] = []
-                client.warns[interaction.guild.id][warnMember.user.id].push({
+                client.warns[interaction.guild.id][warnMember.user.id].unshift({
                     warnAuthor: warnAuthor.user.id,
                     reason: reasonWarn,
                     date: interaction.createdAt
