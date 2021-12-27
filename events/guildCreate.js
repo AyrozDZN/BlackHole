@@ -13,7 +13,7 @@ module.exports = async (client, guild) => {
             .setDescription("To setup the bot, you have to do the command `/setup` on your server, only an administrator or the creator will be able to execute this command")
             .setColor(client.config.discord.color)
             .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
 
         if (audit.executor.id == guild.ownerId) {
             
@@ -22,8 +22,9 @@ module.exports = async (client, guild) => {
         
         } else {
             
-            const channelAuditExecutor = audit.executor.createDM()
-            const channelOwner = guild.members.cache.get(guild.ownerId).user.createDM()
+            const channelAuditExecutor = await audit.executor.createDM()
+            const owner = await guild.fetchOwner()
+            const channelOwner = await owner.createDM()
             channelAuditExecutor.send({ content: `<@${audit.executor.id}>`, embeds: [setupEmbed] })
             channelOwner.send({ content: `<@${guild.ownerId}>`, embeds: [setupEmbed] })
         

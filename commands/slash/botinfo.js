@@ -24,10 +24,10 @@ module.exports = {
             .addField(`⚙️ Architecture`, `${os.arch()}`, true)
             .addField(`📟 RAM`, `${Math.trunc((process.memoryUsage().heapUsed) / 1024 / 1000)} MB / ${Math.trunc(os.totalmem() / 1024 / 1000)} MB (${Math.round((Math.round(process.memoryUsage().heapUsed / 1024 / 1024) / Math.round(os.totalmem() / 1024 / 1024)) * 100)}%)`, true)
             .addField('📉 Latence :', `${client.ws.ping} ms`, true)
-            .addField('📈 Uptime :', `${moment().add(-client.uptime, 'ms').format('[Depuis le] DD/MM/YYYY [à] HH:mm:ss')}, il y a ${humanizeDuration(moment(client.uptime), { units: ["y", "mo", "d", "h"], round: true, language: "fr", largest: 2, delimiter: " et "})}`, true)
+            .addField('📈 Uptime :', `${moment().add(-client.uptime, 'ms').format('[Depuis le] DD/MM/YYYY [à] HH:mm:ss')}.\nIl y a ${humanizeDuration(moment(client.uptime), { units: ["y", "mo", "d", "h"], round: true, language: "fr", largest: 2, delimiter: " et "})}`, true)
             .setThumbnail(client.user.displayAvatarURL())
             .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())   
+            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())   
         
         interaction.reply({ embeds: [botInfo], ephemeral: true })
     }

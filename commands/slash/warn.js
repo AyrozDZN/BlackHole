@@ -1,19 +1,22 @@
-const { ContextMenuCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
-const humanizeDuration = require('humanize-duration')
 const moment = require('moment')
 const fs = require('fs')
 
 module.exports = {
-    data: new ContextMenuCommandBuilder()
-    .setName('Sanctionner')
-    .setType(2),
+    setupRequired: false,
+    category: "Mod",
+    data: new SlashCommandBuilder()
+    .setName('warn')
+    .setDescription('Donner un avertissement à un membre.')
+    .addUserOption(option => option.setName("membre").setDescription('Mentionne le membre en question.').setRequired(true))
+    .addStringOption(option => option.setName("raison").setDescription('Raison de l\'avertissement.')),
 
     async run(client, interaction) {
 
-        const warnMember = interaction.guild.members.cache.get(interaction.targetId)
+        const warnMember = interaction.options.getMember('membre')
         const warnAuthor = interaction.member
-        var reasonWarn = ""
+        var reasonWarn = interaction.options.getString('raison') || ""
 
         const warnEmbed = new MessageEmbed()
             .setColor(client.config.discord.color)
@@ -23,7 +26,7 @@ module.exports = {
             .addField("📎 Raison :", reasonWarn != "" ? reasonWarn : "Aucune raison", true)
             .addField("📆 Date du warn :", moment(interaction.createdAt).format('[Le] DD/MM/YYYY [à] HH:mm:ss'))
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())  
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())  
 
         const row = new MessageActionRow()
             .addComponents(
@@ -38,7 +41,7 @@ module.exports = {
             .setDescription("Vous ne pouvez pas éxécuter cette commande sur un bot.")
             .setColor(client.config.discord.colorError)
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
 
         const permissionEmbed = new MessageEmbed()
             .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
@@ -46,7 +49,7 @@ module.exports = {
             .setDescription("Vous n'avez pas la permission require pour éxécuter cette commande `MODERATE_MEMBERS` requis.")
             .setColor(client.config.discord.colorError)
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
 
         const timeEmbed = new MessageEmbed()
             .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
@@ -54,7 +57,7 @@ module.exports = {
             .setDescription("Vous n'avez pas répondu dans les temps, le warn a été annulé.")
             .setColor(client.config.discord.colorError)
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
 
         const successEmbed = new MessageEmbed()
             .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
@@ -62,7 +65,7 @@ module.exports = {
             .setDescription("Le warn à bien été enregistré.")
             .setColor(client.config.discord.colorSuccess)
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
 
         const cancelEmbed = new MessageEmbed()
             .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
@@ -70,7 +73,7 @@ module.exports = {
             .setDescription("Le warn à bien été annulé.")
             .setColor(client.config.discord.colorSuccess)
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
 
         const reasonEmbed = new MessageEmbed()
             .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
@@ -78,7 +81,7 @@ module.exports = {
             .setDescription("Veuillez entrer une raison.")
             .setColor(client.config.discord.color)
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
 
         if (!warnAuthor.permissions.has('MODERATE_MEMBERS')) return interaction.reply({ embeds: [permissionEmbed], ephemeral: true })
         if (warnMember.user.bot) return interaction.reply({ embeds: [botEmbed], ephemeral: true })
@@ -131,7 +134,7 @@ module.exports = {
                         .addField("📎 Raison :", reasonWarn != "" ? reasonWarn : "Aucune raison", true)
                         .addField("📆 Date du warn :", moment(interaction.createdAt).format('[Le] DD/MM/YYYY [à] HH:mm:ss'))
                         .setTimestamp()
-                        .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())  
+                        .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())  
                     if (reason == 'ended') interaction.editReply({ embeds: [updateWarnEmbed], components: [row] })
                     collector.resetTimer()
                 });

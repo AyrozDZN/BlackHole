@@ -29,7 +29,7 @@ module.exports = {
             .addField(`🗂 Autres :`, `${member.user.flags.toArray().length} Badges\n${member.roles.cache.filter(roles => roles.name !== "@everyone").size} Rôles\n${member.permissions.toArray().length} Permissions`, true)
             .setThumbnail(`${member.user.displayAvatarURL()}?size=4096`)
             .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())   
+            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())   
             
         interaction.reply({ embeds: [UserInfo], ephemeral: true })  
     }
