@@ -1,4 +1,4 @@
-const { ContextMenuCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('@discordjs/builders');
 const { MessageEmbed, Message } = require('discord.js');
 const humanizeDuration = require('humanize-duration')
 const moment = require('moment')
@@ -6,13 +6,14 @@ moment.locale('fr')
 const fs = require('fs')
 
 module.exports = {
-    data: new ContextMenuCommandBuilder()
-    .setName('Liste Avertissement')
-    .setType(2),
+    data: new SlashCommandBuilder()
+    .setName('warnlist')
+    .setDescription("Affiche la liste des avertissements d'un membre")
+    .addUserOption(option => option.setName("membre").setDescription("Membre en question.")),
 
     async run(client, interaction) {
 
-        const member = interaction.guild.members.cache.get(interaction.targetId)
+        const member = interaction.options.getMember("membre") || interaction.member
         const author = interaction.member
 
         const botEmbed = new MessageEmbed()
@@ -33,7 +34,7 @@ module.exports = {
 
         if (!author.permissions.has('MODERATE_MEMBERS')) return interaction.reply({ embeds: [permissionEmbed], ephemeral: true })
         if (member.user.bot) return interaction.reply({ embeds: [botEmbed], ephemeral: true })
-
+        
         const noWarnEmbed = new MessageEmbed()
             .setAuthor(member.user.username, member.user.avatarURL())
             .setTitle("Liste des avertissements : ")
@@ -56,6 +57,8 @@ module.exports = {
             if (i <= 10) text += `**${i}# ${warn.reason != "" ? warn.reason.length >= 50 ? warn.reason.substring(0, 50) + "..." : warn.reason : "Aucune raison"}** • ${humanizeDuration(moment().diff(moment(warn.date)), { units: ["y", "mo", "d", "h", "m", "s"], round: true, language: "fr", largest: 2, delimiter: " et "})}\n`
             i++
         })
+   
+        console.log(text)
 
         const warnListEmbed = new MessageEmbed()
             .setAuthor(member.user.username, member.user.avatarURL())
