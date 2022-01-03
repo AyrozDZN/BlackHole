@@ -1,5 +1,10 @@
 
 <div align="center">
+<br />
+<p>
+<a href="https://blackhole.net"><img src="https://cdn.discordapp.com/attachments/908469379082092645/925014150562844692/BlackHole_Logo.png" width="456" alt="blackhole" /></a>
+</p>
+<br />
 <p>
 <a href="https://discord.gg/rtPazUx"><img src="https://img.shields.io/discord/743787965590929598?style=flat-square&color=5865F2&logo=discord&logoColor=white" alt="Discord server" /></a>
 <a href="https://nodejs.org/en/"><img src="https://img.shields.io/node/v/discord.js.svg?style=flat-square&logo=node.js&logoColor=white&maxAge=3600" alt="node version" /></a>
