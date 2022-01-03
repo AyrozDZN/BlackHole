@@ -18,76 +18,41 @@ module.exports = {
         const warnAuthor = interaction.member
         var reasonWarn = interaction.options.getString('raison') || ""
 
+        const permissionEmbed = new MessageEmbed()
+            .setAuthor({ name: warnAuthor.user.username, iconURL: warnAuthor.user.avatarURL() })
+            .setDescription("Vous n'avez pas la permission require pour éxécuter cette commande `MODERATE_MEMBERS` requis.")
+            .setColor(client.config.discord.colorError)
+            .setTimestamp()
+            .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })
+
+        const botEmbed = new MessageEmbed()
+            .setAuthor({ name: warnAuthor.user.username, iconURL: warnAuthor.user.avatarURL() })
+            .setDescription("Vous ne pouvez pas warn un bot.")
+            .setColor(client.config.discord.colorError)
+            .setTimestamp()
+            .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })
+
+        if (!warnAuthor.permissions.has('MODERATE_MEMBERS')) return interaction.reply({ embeds: [permissionEmbed], ephemeral: true })
+        if (warnMember.user.bot) return interaction.reply({ embeds: [botEmbed], ephemeral: true })
+
         const warnEmbed = new MessageEmbed()
             .setColor(client.config.discord.color)
-            .setAuthor(warnMember.user.username, warnMember.user.avatarURL())
+            .setAuthor({ name: warnMember.user.username, iconURL: warnMember.user.avatarURL() })
             .setTitle(`Gestion du warn`)
             .addField("🏷 Membre warn :", warnMember.user.tag, true)
             .addField("🏷 Auteur du warn :", warnAuthor.user.tag, true)
             .addField("📎 Raison :", reasonWarn != "" ? reasonWarn : "Aucune raison")
             .addField("📆 Date du warn :", moment(interaction.createdAt).format('[Le] DD/MM/YYYY [à] HH:mm:ss'))
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())  
+            .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })  
 
         const row = new MessageActionRow()
             .addComponents(
                 new MessageButton().setCustomId('confirmed').setLabel("Valider").setStyle("SUCCESS"),
                 new MessageButton().setCustomId('reason').setLabel("Entrer une raison").setStyle("SECONDARY"),
                 new MessageButton().setCustomId('cancel').setLabel("Annuler").setStyle("DANGER")
-            )
+            )    
 
-        const botEmbed = new MessageEmbed()
-            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
-            .setTitle("Warn impossible")
-            .setDescription("Vous ne pouvez pas éxécuter cette commande sur un bot.")
-            .setColor(client.config.discord.colorError)
-            .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
-
-        const permissionEmbed = new MessageEmbed()
-            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
-            .setTitle("Permission manquante")
-            .setDescription("Vous n'avez pas la permission require pour éxécuter cette commande `MODERATE_MEMBERS` requis.")
-            .setColor(client.config.discord.colorError)
-            .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
-
-        const timeEmbed = new MessageEmbed()
-            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
-            .setTitle("Warn annulé")
-            .setDescription("Vous n'avez pas répondu dans les temps, le warn a été annulé.")
-            .setColor(client.config.discord.colorError)
-            .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
-
-        const successEmbed = new MessageEmbed()
-            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
-            .setTitle("Warn confirmé")
-            .setDescription("Le warn à bien été enregistré.")
-            .setColor(client.config.discord.colorSuccess)
-            .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
-
-        const cancelEmbed = new MessageEmbed()
-            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
-            .setTitle("Warn annulé")
-            .setDescription("Le warn à bien été annulé.")
-            .setColor(client.config.discord.colorSuccess)
-            .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
-
-        const reasonEmbed = new MessageEmbed()
-            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
-            .setTitle("Raison du warn")
-            .setDescription("Veuillez entrer une raison.")
-            .setColor(client.config.discord.color)
-            .setTimestamp()
-            .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())
-
-        if (!warnAuthor.permissions.has('MODERATE_MEMBERS')) return interaction.reply({ embeds: [permissionEmbed], ephemeral: true })
-        if (warnMember.user.bot) return interaction.reply({ embeds: [botEmbed], ephemeral: true })
-
-            
         interaction.reply({ embeds: [warnEmbed], components: [row] })
 
         const filter = i => i.user.id == warnAuthor.user.id;
@@ -108,6 +73,13 @@ module.exports = {
                     if (err) throw err;
                 })
 
+                const successEmbed = new MessageEmbed()
+                    .setAuthor({ name: warnMember.user.username, iconURL: warnMember.user.avatarURL() })
+                    .setDescription(`Le membre à été warn.\n**Raison :** ${reasonWarn ? reasonWarn : "Aucune raison"}.`)
+                    .setColor(client.config.discord.colorSuccess)
+                    .setTimestamp()
+                    .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })
+
                 interaction.editReply({ embeds: [successEmbed], components: [] })
                 collector.stop('ended')
 	        }
@@ -115,6 +87,13 @@ module.exports = {
 	        if (i.customId === 'reason') {
                 
                 interaction.editReply({ embeds: [warnEmbed], components: [] })
+
+                const reasonEmbed = new MessageEmbed()
+                    .setAuthor({ name: warnAuthor.user.username, iconURL: warnAuthor.user.avatarURL() })
+                    .setDescription("Veuillez entrer une raison.")
+                    .setColor(client.config.discord.color)
+                    .setTimestamp()
+                    .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })
 
                 i.reply({ embeds: [reasonEmbed], components: [] })
 		
@@ -135,20 +114,36 @@ module.exports = {
                         .addField("📎 Raison :", reasonWarn != "" ? reasonWarn : "Aucune raison", true)
                         .addField("📆 Date du warn :", moment(interaction.createdAt).format('[Le] DD/MM/YYYY [à] HH:mm:ss'))
                         .setTimestamp()
-                        .setFooter(`${client.user.username} - ${client.config.discord.footer}`, client.user.avatarURL())  
+                        .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })  
                     if (reason == 'ended') interaction.editReply({ embeds: [updateWarnEmbed], components: [row] })
                     collector.resetTimer()
                 });
 	        }
 
             if (i.customId === 'cancel') {
+                const cancelEmbed = new MessageEmbed()
+                    .setAuthor({ name: warnMember.user.username, iconURL: warnMember.user.avatarURL() })
+                    .setDescription("Le membre n'a pas été warn.")
+                    .setColor(client.config.discord.colorSuccess)
+                    .setTimestamp()
+                    .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })
+
                 interaction.editReply({ embeds: [cancelEmbed], components: [] })
                 collector.stop('ended')
             }
         });
 
         collector.on('end', (collected, reason) => {
-            if (reason == 'time') return interaction.editReply({ embeds: [timeEmbed], components: [] })
+            if (reason != 'time') return 
+
+            const timeEmbed = new MessageEmbed()
+                .setAuthor({ name: warnAuthor.user.username, iconURL: warnAuthor.user.avatarURL() })
+                .setDescription("Vous n'avez pas répondu dans les temps, le warn a été annulé.")
+                .setColor(client.config.discord.colorError)
+                .setTimestamp()
+                .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })
+
+            interaction.editReply({ embeds: [timeEmbed], components: [] })
         });
     }
 }

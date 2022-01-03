@@ -16,7 +16,7 @@ module.exports = {
 
         const botInfo = new MessageEmbed()
             .setColor(client.config.discord.color)
-            .setTitle("👤 Information du Bot :")
+            .setAuthor({ name: client.user.username, iconURL: client.user.avatarURL() })
             .addField("📋 Nom :", client.user.tag, true)
             .addField("📎 ID :", client.user.id, true)
             .addField("🧑‍💻 Developer :", client.config.discord.developer, true)
@@ -27,7 +27,7 @@ module.exports = {
             .addField('📈 Uptime :', `${moment().add(-client.uptime, 'ms').format('[Depuis le] DD/MM/YYYY [à] HH:mm:ss')}.\nIl y a ${humanizeDuration(moment(client.uptime), { units: ["y", "mo", "d", "h"], round: true, language: "fr", largest: 2, delimiter: " et "})}`, true)
             .setThumbnail(client.user.displayAvatarURL())
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())   
+            .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })   
         
         interaction.reply({ embeds: [botInfo], ephemeral: true })
     }

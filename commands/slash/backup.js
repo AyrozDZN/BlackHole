@@ -54,14 +54,14 @@ module.exports = {
                     })
         
                     const backupEmbed = new MessageEmbed()
-                        .setAuthor(backup.data.name, backup.data.iconURL)
+                        .setAuthor({ name: backup.data.name, iconURL: backup.data.iconURL })
                         .setTitle(`Information sur la backup du serveur :`)
                         .setDescription(`**ID :** ${backup.data.id}\n**Date de création :** ${moment(backup.data.createdTimestamp).format('[Le] DD/MM/YYYY [à] HH:mm:ss')}\n**Taille :** ${backup.size} kb`)
                         .addField("Salons :", `\`\`\`${channels}\`\`\``, true)
                         .addField("Rôles :", `\`\`\`${backup.data.roles.map(role => role.name).join('\n')}\`\`\``, true)
                         .setThumbnail(backup.data.iconURL)
                         .setTimestamp()
-                        .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())  
+                        .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })  
 
                     interaction.reply({ embeds : [backupEmbed], ephemeral: true })
         

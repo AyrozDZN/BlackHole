@@ -1,19 +1,88 @@
 const discord = require('discord.js')
+const fs = require('fs')
 
 module.exports = async (client, guild) => {
     
-    if (guild.available == false) return;
+    client.guildSettings[guild.id] = {
+        "addBot": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "everyone": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "link": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "spam": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "massBan": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "massKick": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "webhooks": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "channelCreate": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        },
+        "channelDelete": {
+            "whitelist": [],
+            "status": false,
+            "times": 0,
+            "duration": 0,
+            "sanction": "kick"
+        }
+    }
+
+    fs.writeFileSync('./config/guildSettings.json', JSON.stringify(client.guildSettings, null, 4), err => {
+        if (err) throw err;
+    })
     
     const audit = (await guild.fetchAuditLogs()).entries.first()
     if (audit.action === "BOT_ADD") {
 
         const setupEmbed = new discord.MessageEmbed()
-            .setAuthor(client.user.username, client.user.avatarURL(), client.config.discord.link)
+            .setAuthor({user: client.user.username, avatarURL: client.user.avatarURL(), url: client.config.discord.link})
             .setTitle("SETUP")
             .setDescription("To setup the bot, you have to do the command `/setup` on your server, only an administrator or the creator will be able to execute this command")
             .setColor(client.config.discord.color)
             .setTimestamp()
-            .setFooter(`${client.user.username} • ${client.config.discord.footer}`, client.user.avatarURL())
+            .setFooter({ text: `${client.user.username} • ${client.config.discord.footer}`, iconURL: client.user.avatarURL })
 
         if (audit.executor.id == guild.ownerId) {
             
