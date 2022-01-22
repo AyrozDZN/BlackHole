@@ -3,6 +3,7 @@
 /config/slashcommandsglobals.js
 /config/warns.json
 /config/guildSettings.json
+/config/profiles.json
 
 # Logs
 logs
